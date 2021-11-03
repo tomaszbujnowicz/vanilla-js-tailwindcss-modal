@@ -93,12 +93,12 @@ You can control overlay and the div wrapper animations using TailwindCSS classes
 ```html
 <div
   ...
-  data-class-out="opacity-0"
   data-class-in="opacity-50"
+  data-class-out="opacity-0"
   class="opacity-0 ..."></div>
   <div
-    data-class-out="opacity-0 translate-y-5"
     data-class-in="opacity-100 translate-y-0"
+    data-class-out="opacity-0 translate-y-5"
     class="opacity-0 translate-y-5 ...">
 
 ```
