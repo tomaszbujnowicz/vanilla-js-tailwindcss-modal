@@ -206,14 +206,15 @@
       };
 
       // Open Modal
-      var openModal = function (trigger, target) {
+      var openModal = function (event, destination) {
 
-        // Check whether the modal is triggered automatically
-        // via modal.openModal
-        if (typeof trigger === 'string') {
-          var target = document.getElementById(trigger);
-          // If modal is triggered via modal.openModal we add css class
-          // to know that toggleccessibility() should be used when closeModal
+        var target = destination;
+
+        // Check whether the modal is triggered automatically via modal.openModal
+        if (typeof event === 'string') {
+          target = document.getElementById(event);
+          // If modal is triggered via modal.openModal we add a data attribute
+          // to know whether toggleccessibility() should be used when closeModal
           // as there is no button used
           target.setAttribute('data-auto-trigger', '');
         }
@@ -230,8 +231,9 @@
         document.documentElement.style.overflow = 'hidden';
 
         // Toggle accessibility
-        if (typeof trigger !== 'string') {
-          toggleccessibility(trigger);
+        // Check whether the modal is triggered automatically via modal.openModal
+        if (typeof event !== 'string') {
+          toggleccessibility(event);
         }
 
         // Show wrapper
@@ -254,6 +256,9 @@
             input.focus();
           }
 
+          // Trap focus
+          trapFocus(target);
+
         }, settings.speedOpen);
 
       };
@@ -261,20 +266,15 @@
       // Close Modal
       var closeModal = function (event) {
 
-        console.log(typeof event);
-
         // Find target
         var closestParent = event.closest(settings.selectorTarget),
             trigger = document.querySelector('[aria-controls="' + closestParent.id + '"'),
             overlay = closestParent.querySelector(settings.selectorOverlay),
             wrapper = closestParent.querySelector(settings.selectorWrapper);
 
-        var trigger = document.querySelector('[aria-controls="' + closestParent.id + '"');
         if (trigger === null) {
           var trigger = document.querySelector('a[href="#' + closestParent.id + '"');
         }
-
-        console.log(closestParent);
 
         // Hide overlay
         if (overlay) {
@@ -309,25 +309,24 @@
       // Click Handler
       var clickHandler = function (event) {
 
-        // Find toggle element
-        var toggle = event.target;
-
-        console.log(toggle);
+      // Find toggle element
+      var toggle = event.target,
+        trigger,
+        target,
+        open = null;
 
         // Check whether toggle is:
         // 1. <button data-modal-trigger aria-controls="modal-name" ...
         // 2. <a href="#modal-name" ...
         // 3. null
         if ( toggle.hasAttribute('data-modal-trigger') && (toggle.hasAttribute('aria-controls')) ) {
-          var trigger = toggle.closest(settings.selectorTrigger);
-          var target = document.getElementById(trigger.getAttribute('aria-controls'));
-          var open = true;
+          trigger = toggle.closest(settings.selectorTrigger);
+          target = document.getElementById(trigger.getAttribute('aria-controls'));
+          open = true;
         } else if ( (toggle.hash) && (toggle.hash.substr(1).indexOf('modal') > -1) ) {
-          var trigger = toggle;
-          var target = document.getElementById(toggle.hash.substr(1));
-          var open = true;
-        } else {
-          var open = null;
+          trigger = toggle;
+          target = document.getElementById(toggle.hash.substr(1));
+          open = true;
         }
 
         var close = toggle.closest(settings.selectorClose);
@@ -387,6 +386,7 @@
 
     document.addEventListener("DOMContentLoaded", function() {
       modal.init()
+      modal.openModal('modal-name');
     });
 
   </script>
