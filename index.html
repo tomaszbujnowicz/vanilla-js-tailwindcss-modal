@@ -224,8 +224,12 @@
           // If modal is triggered via modal.openModal we add a data attribute
           // to know whether toggleccessibility() should be used when closeModal
           // as there is no button used
-          target.setAttribute('data-auto-trigger', '');
+          if (target) {
+            target.setAttribute('data-auto-trigger', '');
+          }
         }
+
+        if (!target) return;
 
         // Find target
         var overlay = target.querySelector(settings.selectorOverlay),
@@ -348,7 +352,7 @@
         var close = toggle.closest(settings.selectorClose);
 
         // Open modal when the open button is clicked
-        if (open) {
+        if (open && target) {
           openModal(trigger, target);
         }
 
@@ -402,6 +406,7 @@
 
     document.addEventListener("DOMContentLoaded", function() {
       modal.init()
+      modal.openModal('modal-name')
     });
 
   </script>
