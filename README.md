@@ -47,10 +47,14 @@ Trigger via a tag
       data-modal-close
       data-modal-overlay
       tabindex="-1"
-      class="fixed inset-0 w-full z-40 opacity-0 transition-opacity duration-300 bg-black select-none"></div>
+      data-class-out="opacity-0"
+      data-class-in="opacity-50"
+      class="opacity-0 fixed inset-0 w-full z-40 transition-opacity duration-300 bg-black select-none"></div>
     <div
       data-modal-wrapper
-      class="w-full z-50 overflow-auto opacity-0 max-w-md max-h-screen scrolling-touch transition-all duration-300 bg-white flex flex-col transform translate-y-5 shadow-xl rounded-md m-5">
+      data-class-out="opacity-0 translate-y-5"
+      data-class-in="opacity-100 translate-y-0"
+      class="opacity-0 translate-y-5 w-full z-50 overflow-auto max-w-md max-h-screen scrolling-touch transition-all duration-300 bg-white flex flex-col transform shadow-xl rounded-md m-5">
       <div class="flex items-center justify-between border-b p-6">
         <div>
           Headline
@@ -78,6 +82,25 @@ Trigger via a tag
     </div>
   </div>
 </div>
+```
+
+## Animations
+You can control overlay and the div wrapper animations via data-class-out and data-class-in using TailwindCSS classes
+
+- Leaving screen: `data-class-out` and `class`
+- Entering screen: `data-class-in`
+
+```html
+<div
+  ...
+  data-class-out="opacity-0"
+  data-class-in="opacity-50"
+  class="opacity-0 ..."></div>
+  <div
+    data-class-out="opacity-0 translate-y-5"
+    data-class-in="opacity-100 translate-y-0"
+    class="opacity-0 translate-y-5 ...">
+
 ```
 
 ## Initialize

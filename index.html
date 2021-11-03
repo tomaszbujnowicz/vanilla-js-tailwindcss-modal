@@ -28,10 +28,14 @@
         data-modal-close
         data-modal-overlay
         tabindex="-1"
-        class="fixed inset-0 w-full z-40 opacity-0 transition-opacity duration-300 bg-black select-none"></div>
+        data-class-out="opacity-0"
+        data-class-in="opacity-50"
+        class="opacity-0 fixed inset-0 w-full z-40 transition-opacity duration-300 bg-black select-none"></div>
       <div
         data-modal-wrapper
-        class="w-full z-50 overflow-auto opacity-0 max-w-md max-h-screen scrolling-touch transition-all duration-300 bg-white flex flex-col transform translate-y-5 shadow-xl rounded-md m-5">
+        data-class-out="opacity-0 translate-y-5"
+        data-class-in="opacity-100 translate-y-0"
+        class="opacity-0 translate-y-5 w-full z-50 overflow-auto max-w-md max-h-screen scrolling-touch transition-all duration-300 bg-white flex flex-col transform shadow-xl rounded-md m-5">
         <div class="flex items-center justify-between border-b p-6">
           <div>
             Headline
@@ -67,14 +71,14 @@
 
   <div class="mb-4">
     <a
-      href="#modal-name-full-screen"
+      href="#modal-full-screen"
       aria-expanded="false">
       Open full screen modal
     </a>
   </div>
 
   <div
-    id="modal-name-full-screen"
+    id="modal-full-screen"
     data-modal-target
     class="hidden">
     <div class="flex items-center justify-center fixed inset-0 z-50">
@@ -82,10 +86,14 @@
         data-modal-close
         data-modal-overlay
         tabindex="-1"
-        class="fixed inset-0 w-full z-40 opacity-0 transition-opacity duration-300 bg-black select-none"></div>
+        data-class-out="opacity-0"
+        data-class-in="opacity-50"
+        class="opacity-0 fixed inset-0 w-full z-40 transition-opacity duration-300 bg-black select-none"></div>
       <div
         data-modal-wrapper
-        class="w-full h-full z-50 overflow-auto opacity-0 scrolling-touch transition-all duration-300 bg-white flex flex-col transform translate-y-5">
+        data-class-out="opacity-0 translate-y-5"
+        data-class-in="opacity-100 translate-y-0"
+        class="opacity-0 translate-y-5 w-full h-full z-50 overflow-auto scrolling-touch transition-all duration-300 bg-white flex flex-col transform">
         <div class="flex items-center justify-between p-6">
           <button
             data-modal-close
@@ -241,15 +249,19 @@
 
           // Show overlay
           if (overlay) {
-            overlay.classList.remove('opacity-0');
-            overlay.classList.add('opacity-50');
+            var overlayIn = overlay.getAttribute('data-class-in').split(' '),
+              overlayOut = overlay.getAttribute('data-class-out').split(' ');
+            overlay.classList.remove(...overlayOut);
+            overlay.classList.add(...overlayIn);
           }
 
           // Show drawer
-          wrapper.classList.remove('translate-y-5');
-          wrapper.classList.add('translate-y-0');
-          wrapper.classList.remove('opacity-0');
-          wrapper.classList.add('opacity-100');
+          if (wrapper) {
+            var wrapperIn = wrapper.getAttribute('data-class-in').split(' '),
+              wrapperOut = wrapper.getAttribute('data-class-out').split(' ');
+            wrapper.classList.remove(...wrapperOut);
+            wrapper.classList.add(...wrapperIn);
+          }
 
           // Focus on input
           if (input) {
@@ -278,15 +290,19 @@
 
         // Hide overlay
         if (overlay) {
-          overlay.classList.remove('opacity-50');
-          overlay.classList.add('opacity-0')
+          var overlayIn = overlay.getAttribute('data-class-in').split(' '),
+            overlayOut = overlay.getAttribute('data-class-out').split(' ');
+          overlay.classList.remove(...overlayIn);
+          overlay.classList.add(...overlayOut);
         }
 
         // Hide wrapper
-        wrapper.classList.remove('translate-y-0');
-        wrapper.classList.add('translate-y-5');
-        wrapper.classList.remove('opacity-100');
-        wrapper.classList.add('opacity-0');
+        if (wrapper) {
+          var wrapperIn = wrapper.getAttribute('data-class-in').split(' '),
+            wrapperOut = wrapper.getAttribute('data-class-out').split(' ');
+          wrapper.classList.remove(...wrapperIn);
+          wrapper.classList.add(...wrapperOut);
+        }
 
         // Remove body overflow hidden
         document.documentElement.style.overflow = '';
