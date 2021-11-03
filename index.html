@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Modal | Vanilla JS TailwindCSS Component</title>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="antialiased p-8">
+
+  <div class="mb-4">
+    <button
+      data-modal-trigger
+      aria-controls="modal-name"
+      aria-expanded="false">
+      Open modal
+    </button>
+  </div>
+
+  <div
+    id="modal-name"
+    data-modal-target
+    class="hidden">
+    <div class="flex items-center justify-center fixed inset-0 z-50">
+      <div
+        data-modal-close
+        data-modal-overlay
+        tabindex="-1"
+        class="fixed inset-0 w-full z-40 opacity-0 transition-opacity duration-300 bg-black select-none"></div>
+      <div
+        data-modal-wrapper
+        class="w-full z-50 overflow-auto opacity-0 max-w-md max-h-screen scrolling-touch transition-all duration-300 bg-white flex flex-col transform translate-y-5 shadow-xl rounded-md m-5">
+        <div class="flex items-center justify-between border-b p-6">
+          <div>
+            Headline
+          </div>
+          <button
+            data-modal-close
+            aria-label="Close"
+            class="text-gray-700 hover:text-black focus:outline-none focus:text-black transition ease-in-out duration-150 ml-auto">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+        <div class="relative overflow-x-hidden overflow-y-auto h-full flex-grow p-5">
+          <p class="mb-4">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem in aliquid nulla, sed veritatis, officiis ea aut natus quas voluptates perferendis ratione modi ab qui omnis cum labore alias eos.
+          </p>
+          <div class="mb-4">
+            <label for="example" class="block mb-2">Autofocus when opening modal</label>
+            <input type="text" name="example" id="example" placeholder="Example" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" data-modal-input-focus autofocus>
+          </div>
+          <div class="text-right">
+            <button
+              data-modal-close
+              class="underline">
+              Close Modal
+            </button>
+            or [esc] key
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="mb-4">
+    <a
+      href="#modal-name-full-screen"
+      aria-expanded="false">
+      Open full screen modal
+    </a>
+  </div>
+
+  <div
+    id="modal-name-full-screen"
+    data-modal-target
+    class="hidden">
+    <div class="flex items-center justify-center fixed inset-0 z-50">
+      <div
+        data-modal-close
+        data-modal-overlay
+        tabindex="-1"
+        class="fixed inset-0 w-full z-40 opacity-0 transition-opacity duration-300 bg-black select-none"></div>
+      <div
+        data-modal-wrapper
+        class="w-full h-full z-50 overflow-auto opacity-0 scrolling-touch transition-all duration-300 bg-white flex flex-col transform translate-y-5">
+        <div class="flex items-center justify-between p-6">
+          <button
+            data-modal-close
+            aria-label="Close"
+            class="text-gray-700 hover:text-black focus:outline-none focus:text-black transition ease-in-out duration-150 ml-auto">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="relative overflow-x-hidden overflow-y-auto h-full flex flex-col justify-center flex-grow p-5 w-full max-w-xl mx-auto">
+          <p class="mb-4">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem in aliquid nulla, sed veritatis, officiis ea aut natus quas voluptates perferendis ratione modi ab qui omnis cum labore alias eos.
+          </p>
+          <div class="text-right">
+            <button
+              data-modal-close
+              class="underline">
+              Close Modal
+            </button>
+            or [esc] key
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    /**
+     * Modal
+     * modal.openModal('modal-name');
+     */
+
+     const modal = (() => {
+
+      var publicAPIs = {};
+
+
+      //
+      // Settings
+      //
+      var settings = {
+        speedOpen: 50,
+        speedClose: 250,
+        toggleClass: 'hidden',
+        selectorTarget: '[data-modal-target]',
+        selectorTrigger: '[data-modal-trigger]',
+        selectorClose: '[data-modal-close]',
+        selectorOverlay: '[data-modal-overlay]',
+        selectorWrapper: '[data-modal-wrapper]',
+        selectorInputFocus: '[data-modal-input-focus]'
+      };
+
+
+      /**
+      * Element.closest() polyfill
+      * https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+      */
+      if (!Element.prototype.closest) {
+        if (!Element.prototype.matches) {
+          Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+        }
+        Element.prototype.closest = function (s) {
+          var el = this;
+          var ancestor = this;
+          if (!document.documentElement.contains(el)) return null;
+          do {
+            if (ancestor.matches(s)) return ancestor;
+            ancestor = ancestor.parentElement;
+          } while (ancestor !== null);
+          return null;
+        };
+      }
+
+      // Trap Focus
+      // https://hiddedevries.nl/en/blog/2017-01-29-using-javascript-to-trap-focus-in-an-element
+      //
+      function trapFocus(element) {
+        var focusableEls = element.querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])');
+        var firstFocusableEl = focusableEls[0];
+        var lastFocusableEl = focusableEls[focusableEls.length - 1];
+        var KEYCODE_TAB = 9;
+
+        element.addEventListener('keydown', function(e) {
+          var isTabPressed = (e.key === 'Tab' || e.keyCode === KEYCODE_TAB);
+
+          if (!isTabPressed) {
+            return;
+          }
+
+          if ( e.shiftKey ) /* shift + tab */ {
+            if (document.activeElement === firstFocusableEl) {
+              lastFocusableEl.focus();
+                e.preventDefault();
+              }
+            } else /* tab */ {
+            if (document.activeElement === lastFocusableEl) {
+              firstFocusableEl.focus();
+                e.preventDefault();
+              }
+            }
+        });
+      }
+
+
+      //
+      // Methods
+      //
+
+      // Toggle accessibility
+      var toggleccessibility = function (event) {
+        if (event.getAttribute('aria-expanded') === 'true') {
+          event.setAttribute('aria-expanded', false);
+        } else {
+          event.setAttribute('aria-expanded', true);
+        }
+      };
+
+      // Open Modal
+      var openModal = function (trigger, target) {
+
+        // Check whether the modal is triggered automatically
+        // via modal.openModal
+        if (typeof trigger === 'string') {
+          var target = document.getElementById(trigger);
+          // If modal is triggered via modal.openModal we add css class
+          // to know that toggleccessibility() should be used when closeModal
+          // as there is no button used
+          target.setAttribute('data-auto-trigger', '');
+        }
+
+        // Find target
+        var overlay = target.querySelector(settings.selectorOverlay),
+            wrapper = target.querySelector(settings.selectorWrapper),
+            input = target.querySelector(settings.selectorInputFocus);
+
+        // Make it active and remoe hidden class
+        target.classList.remove(settings.toggleClass);
+
+        // Make body overflow hidden so it's not scrollable
+        document.documentElement.style.overflow = 'hidden';
+
+        // Toggle accessibility
+        if (typeof trigger !== 'string') {
+          toggleccessibility(trigger);
+        }
+
+        // Show wrapper
+        setTimeout(function () {
+
+          // Show overlay
+          if (overlay) {
+            overlay.classList.remove('opacity-0');
+            overlay.classList.add('opacity-50');
+          }
+
+          // Show drawer
+          wrapper.classList.remove('translate-y-5');
+          wrapper.classList.add('translate-y-0');
+          wrapper.classList.remove('opacity-0');
+          wrapper.classList.add('opacity-100');
+
+          // Focus on input
+          if (input) {
+            input.focus();
+          }
+
+        }, settings.speedOpen);
+
+      };
+
+      // Close Modal
+      var closeModal = function (event) {
+
+        console.log(typeof event);
+
+        // Find target
+        var closestParent = event.closest(settings.selectorTarget),
+            trigger = document.querySelector('[aria-controls="' + closestParent.id + '"'),
+            overlay = closestParent.querySelector(settings.selectorOverlay),
+            wrapper = closestParent.querySelector(settings.selectorWrapper);
+
+        var trigger = document.querySelector('[aria-controls="' + closestParent.id + '"');
+        if (trigger === null) {
+          var trigger = document.querySelector('a[href="#' + closestParent.id + '"');
+        }
+
+        console.log(closestParent);
+
+        // Hide overlay
+        if (overlay) {
+          overlay.classList.remove('opacity-50');
+          overlay.classList.add('opacity-0')
+        }
+
+        // Hide wrapper
+        wrapper.classList.remove('translate-y-0');
+        wrapper.classList.add('translate-y-5');
+        wrapper.classList.remove('opacity-100');
+        wrapper.classList.add('opacity-0');
+
+        // Remove body overflow hidden
+        document.documentElement.style.overflow = '';
+
+        // Toggle accessibility
+        // Check whether the modal was triggered automatically via modal.openModal
+        if (closestParent.hasAttribute('data-auto-trigger')) {
+          closestParent.removeAttribute('data-auto-trigger');
+        } else {
+          toggleccessibility(trigger);
+        }
+
+        // Make it not active
+        setTimeout(function () {
+          closestParent.classList.add(settings.toggleClass);
+        }, settings.speedClose);
+
+      };
+
+      // Click Handler
+      var clickHandler = function (event) {
+
+        // Find toggle element
+        var toggle = event.target;
+
+        console.log(toggle);
+
+        // Check whether toggle is:
+        // 1. <button data-modal-trigger aria-controls="modal-name" ...
+        // 2. <a href="#modal-name" ...
+        // 3. null
+        if ( toggle.hasAttribute('data-modal-trigger') && (toggle.hasAttribute('aria-controls')) ) {
+          var trigger = toggle.closest(settings.selectorTrigger);
+          var target = document.getElementById(trigger.getAttribute('aria-controls'));
+          var open = true;
+        } else if ( (toggle.hash) && (toggle.hash.substr(1).indexOf('modal') > -1) ) {
+          var trigger = toggle;
+          var target = document.getElementById(toggle.hash.substr(1));
+          var open = true;
+        } else {
+          var open = null;
+        }
+
+        var close = toggle.closest(settings.selectorClose);
+
+        // Open modal when the open button is clicked
+        if (open) {
+          openModal(trigger, target);
+        }
+
+        // Close modal when the close button (or overlay area) is clicked
+        if (close) {
+          closeModal(close);
+        }
+
+        // Prevent default link behavior
+        if (open || close) {
+          event.preventDefault();
+        }
+
+      };
+
+      // Keydown Handler, handle Escape button
+      var keydownHandler = function (event) {
+
+        if (event.key === 'Escape' || event.keyCode === 27) {
+
+          // Find all possible modals
+          var modals = document.querySelectorAll(settings.selectorTarget),
+              i;
+
+          // Find active modals and close them when escape is clicked
+          for (i = 0; i < modals.length; ++i) {
+            if (!modals[i].classList.contains(settings.toggleClass)) {
+              closeModal(modals[i]);
+            }
+          }
+
+        }
+
+      };
+
+
+      publicAPIs.init = function () {
+        //
+        // Inits & Event Listeners
+        //
+        document.addEventListener('click', clickHandler, false);
+        document.addEventListener('keydown', keydownHandler, false);
+      };
+
+      publicAPIs.openModal = openModal;
+      publicAPIs.closeModal = closeModal;
+
+      return publicAPIs;
+
+    })();
+
+    document.addEventListener("DOMContentLoaded", function() {
+      modal.init()
+    });
+
+  </script>
+
+</body>
+</html>
