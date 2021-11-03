@@ -85,7 +85,7 @@ Trigger via a tag
 ```
 
 ## Animations
-You can control overlay and the div wrapper animations via data-class-out and data-class-in using TailwindCSS classes
+You can control overlay and the div wrapper animations using TailwindCSS classes via:
 
 - Leaving screen: `data-class-out` and `class`
 - Entering screen: `data-class-in`
