@@ -347,7 +347,7 @@
         // 1. <button data-modal-trigger aria-controls="modal-name" ...
         // 2. <a href="#modal-name" ...
         // 3. null
-        if ( toggle.hasAttribute('data-modal-trigger') && (toggle.hasAttribute('aria-controls')) ) {
+        if (toggle.hasAttribute(settings.selectorTrigger.replace(/[\[\]']+/g, '')) && (toggle.hasAttribute('aria-controls')) ) {
           trigger = toggle.closest(settings.selectorTrigger);
           target = document.getElementById(trigger.getAttribute('aria-controls'));
           open = true;
