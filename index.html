@@ -77,7 +77,7 @@
     <a
       href="#modal-full-screen"
       aria-expanded="false">
-      Open full screen modal
+      Open modal full screen
     </a>
   </div>
 
@@ -123,6 +123,126 @@
             </button>
             or [esc] key
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="mb-4">
+    <button
+      data-modal-trigger
+      aria-controls="drawer-name"
+      aria-expanded="false"
+      type="button">
+      Open modal drawer-style right side
+    </button>
+  </div>
+
+  <div
+    id="drawer-name"
+    data-modal-target
+    class="hidden absolute inset-0 overflow-hidden">
+    <div
+      data-modal-close
+      data-modal-overlay
+      tabindex="-1"
+      data-class-in="opacity-50"
+      data-class-out="opacity-0"
+      class="fixed inset-0 w-full z-40 opacity-0 transition-opacity duration-500 bg-black select-none"></div>
+    <div
+      data-modal-wrapper
+      data-class-in="translate-x-0"
+      data-class-out="translate-x-full"
+      class="fixed top-0 right-0 bottom-0 w-10/12 h-full max-w-md z-50 overflow-auto scrolling-touch transition-transform duration-500 bg-white flex flex-col shadow-xl transform translate-x-full">
+      <div class="flex items-center justify-between border-b p-6">
+        <h3>
+          Headline
+        </h3>
+        <button
+          data-modal-close
+          class="text-gray-700 hover:text-black focus:text-black transition ease-in-out duration-150 ml-auto" aria-label="Close">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+      <div class="relative h-full flex-grow overflow-x-hidden overflow-y-auto p-6">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem in aliquid nulla, sed veritatis, officiis ea aut
+          natus quas voluptates perferendis ratione modi ab qui omnis cum labore alias eos.
+        </p>
+        <div class="text-right">
+          <button
+            data-modal-close
+            type="button"
+            class="underline">
+            Close Drawer
+          </button>
+          or [esc] key
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="mb-4">
+    <button
+      data-modal-trigger
+      aria-controls="drawer-name-left"
+      aria-expanded="false"
+      type="button">
+      Open modal drawer-style left side
+    </button>
+  </div>
+
+  <div
+    id="drawer-name-left"
+    data-modal-target
+    class="hidden absolute inset-0 overflow-hidden">
+    <div
+      data-modal-close
+      data-modal-overlay
+      tabindex="-1"
+      data-class-in="opacity-50"
+      data-class-out="opacity-0"
+      class="fixed inset-0 w-full z-40 opacity-0 transition-opacity duration-500 bg-black select-none"></div>
+    <div
+      data-modal-wrapper
+      data-class-in="translate-x-0"
+      data-class-out="-translate-x-full"
+      class="fixed top-0 left-0 bottom-0 w-10/12 h-full max-w-md z-50 overflow-auto scrolling-touch transition-transform duration-500 bg-white flex flex-col shadow-xl transform -translate-x-full">
+      <div class="flex items-center justify-between border-b p-6">
+        <h3>
+          Headline
+        </h3>
+        <button
+          data-modal-close
+          class="text-gray-700 hover:text-black focus:text-black transition ease-in-out duration-150 ml-auto" aria-label="Close">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+      <div class="relative h-full flex-grow overflow-x-hidden overflow-y-auto p-6">
+        <p class="mb-4">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem in aliquid nulla, sed veritatis, officiis ea aut
+          natus quas voluptates perferendis ratione modi ab qui omnis cum labore alias eos.
+        </p>
+        <div class="mb-4">
+          <label for="example" class="block mb-2">Autofocus when opening modal</label>
+          <input type="text" name="example" id="example" placeholder="Example" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline" data-modal-input-focus autofocus>
+        </div>
+        <div class="text-right">
+          <button
+            data-modal-close
+            type="button"
+            class="underline">
+            Close Drawer
+          </button>
+          or [esc] key
         </div>
       </div>
     </div>
