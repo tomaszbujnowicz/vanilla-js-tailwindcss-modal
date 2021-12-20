@@ -412,9 +412,9 @@
 
         // Find target
         var closestParent = event.closest(settings.selectorTarget),
-            trigger = document.querySelector('[aria-controls="' + closestParent.id + '"'),
-            overlay = closestParent.querySelector(settings.selectorOverlay),
-            wrapper = closestParent.querySelector(settings.selectorWrapper);
+          trigger = document.querySelector('[aria-controls="' + closestParent.id + '"'),
+          overlay = closestParent.querySelector(settings.selectorOverlay),
+          wrapper = closestParent.querySelector(settings.selectorWrapper);
 
         if (trigger === null) {
           trigger = document.querySelector('a[href="#' + closestParent.id + '"');
@@ -457,11 +457,11 @@
       // Click Handler
       var clickHandler = function (event) {
 
-      // Find toggle element
-      var toggle = event.target,
-        trigger,
-        target,
-        open = null;
+        // Find toggle element
+        var toggle = event.target,
+          trigger,
+          target,
+          open = null;
 
         // Check whether toggle is:
         // 1. <button data-modal-trigger aria-controls="modal-name" ...
