@@ -461,19 +461,31 @@
         var toggle = event.target,
           trigger,
           target,
+          closestButton = toggle.closest('button'),
+          closest = toggle.closest('a'),
           open = null;
 
         // Check whether toggle is:
         // 1. <button data-modal-trigger aria-controls="modal-name" ...
-        // 2. <a href="#modal-name" ...
-        // 3. null
-        if (toggle.hasAttribute(settings.selectorTrigger.replace(/[\[\]']+/g, '')) && (toggle.hasAttribute('aria-controls')) ) {
+        // 2. <button data-modal-trigger aria-controls="modal-name"><span>...</span> ...
+        // 3. <a href="#modal-name" ...
+        // 4. <a href="#modal-name"><span>...</span> ...
+        // 5. null
+        if ( toggle.hasAttribute('data-modal-trigger') && (toggle.hasAttribute('aria-controls')) ) {
+          trigger = toggle.closest(settings.selectorTrigger);
+          target = document.getElementById(trigger.getAttribute('aria-controls'));
+          open = true;
+        } else if ( closestButton && closestButton.hasAttribute('data-modal-trigger') && (closestButton.hasAttribute('aria-controls')) ) {
           trigger = toggle.closest(settings.selectorTrigger);
           target = document.getElementById(trigger.getAttribute('aria-controls'));
           open = true;
         } else if ( (toggle.hash) && (toggle.hash.substr(1).indexOf('modal') > -1) ) {
           trigger = toggle;
           target = document.getElementById(toggle.hash.substr(1));
+          open = true;
+        }  else if ( closest && (closest.hash) && (closest.hash.substr(1).indexOf('modal') > -1) ) {
+          trigger = closest;
+          target = document.getElementById(closest.hash.substr(1));
           open = true;
         }
 
